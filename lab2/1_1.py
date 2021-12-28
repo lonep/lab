@@ -10,15 +10,12 @@ table = pd.merge(orders, products, how='inner', on='ProductID')
 print(products.groupby(by='CategoryName')['ProductName'].count())
 print(products[products['CategoryName'] == 'Морепродукты'])
 
-orders.index = pd.to_datetime(orders['OrderDate'])
-orders.groupby(by=[orders.index.month])['Quantity'].count().plot()
+table.index = pd.to_datetime(orders['OrderDate'])
+table.groupby(by=[table.index.month, table.index.year])['Quantity'].count().plot()
 plt.title('Кол-во заказов по месяцам')
 plt.ylabel('Заказы')
-plt.xlabel('Месяц')
+plt.xlabel('Месяц/Год')
 
-
-
-table = pd.merge(orders, products, how='inner', on='ProductID')
 table['OrderSum'] = np.where((table['UnitPrice_x'] < table['UnitPrice_y']),table['Quantity']*table['QuantityPerUnit']*table['UnitPrice_x']*(1-table['Discount']),
                           table['Quantity']*table['QuantityPerUnit']*table['UnitPrice_y']*(1-table['Discount']))
 
